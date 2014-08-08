@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AFHTTPRequestOperationManager.h"
 
 @interface ViewController : UITableViewController
 @property (strong, nonatomic) IBOutlet UITableView *tableView;

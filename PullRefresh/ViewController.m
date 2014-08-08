@@ -43,6 +43,16 @@
         refresh.attributedTitle = [[NSAttributedString alloc]initWithString:@"Refreshing data..."];
         [self performSelector:@selector(handleData) withObject:nil afterDelay:0];
     }
+    [self test];
+}
+
+-(void)test{
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:@"http://localhost:3000/index.json" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
 }
 
 -(void)handleData{
@@ -50,7 +60,7 @@
     [formatter setDateFormat:@"MMM d, h:mm:ss a"];
     NSString *lastUpdate = [NSString stringWithFormat:@"Last Update On %@",[formatter stringFromDate:[NSDate date]]];
     self.refreshControl.attributedTitle = [[[NSAttributedString alloc]init]initWithString:lastUpdate];
-    int j = rand()%1000;
+    int j = arc4random()%1000;
     for (int i = 0; i<j; i++) {
         self.count++;
         [self.countArr addObject:[NSString stringWithFormat:@"%d. %@, Refresh In Tony",self.count,[formatter stringFromDate:[NSDate date]]]];
