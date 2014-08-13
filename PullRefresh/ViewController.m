@@ -49,7 +49,35 @@
 -(void)test{
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager GET:@"http://localhost:3000/index.json" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString *url = nil;
+        NSString *fileName = nil;
+        NSString *size = nil;
+        NSString *idStr = nil;
+        NSString *body = nil;
+        NSString *title = nil;
         NSLog(@"JSON: %@", responseObject);
+        if ([responseObject isKindOfClass:[NSArray class]]) {
+            for (id comobj in responseObject) {
+                //NSLog(@"==>%@",comobj);
+                if ([comobj isKindOfClass:[NSDictionary class]]) {
+                    idStr = [comobj objectForKey:@"_id"];
+                    body = [comobj objectForKey:@"body"];
+                    title = [comobj objectForKey:@"title"];
+                    id image = [comobj objectForKey:@"image"];
+                    if (![image isKindOfClass:[NSNull class]]) {
+                        url = [NSString stringWithFormat:@"http://127.0.0.1:3000%@",[image objectForKey:@"url"]];
+                        fileName = [image objectForKey:@"filename"];
+                        size = [image objectForKey:@"size"];
+                    }else{
+                        url = nil;
+                        fileName = nil;
+                        size = nil;
+                    }
+                    
+                    NSLog(@"%@:%@:%@:%@:%@:%@",idStr,title,body,url,fileName,size);
+                }
+            }
+        }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
